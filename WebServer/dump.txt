@@ -1,0 +1,19 @@
+const api_url = "http://localhost:3000/data";
+var json 
+
+async function getapi(url) {
+    const response = await fetch(url);
+    var data = await response.json();
+    console.log(data);
+    if (response) {
+        hideloader();
+    }
+	json = data
+}
+	    
+setInterval("getapi(api_url)", 500)
+
+const obj = JSON.parse(json);
+lat_kapal = obj.lat_kapal;
+lng_kapal = obj.lng_kapal;
+console.log(lat_kapal);

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+
+<style>
+
+#mapid { height: 1080px; }
+
+</style>
+
+<script type="text/javascript">
+var serialport = require("serialport");
+var SerialPort = serialport.SerialPort;
+var portName = process.argv[2];
+ 
+var sp = new serialport("COM3",{
+baudRate: 9600
+});
+const Readline = serialport.parsers.Readline;
+const parser = new Readline;
+sp.pipe(parser);
+ 
+parser.on('data',onData);
+
+ 
+function onData(data){
+/* console.log(data); */
+autoGenerateVarFromArray(data.split(' '), 'temp');
+lat1 = parseFloat(temp_1)
+lng1 = parseFloat(temp_3)
+docWrite(lat1)
+docWrite(lng1)
+
+}
+
+function docWrite(variable) {
+    document.write(variable);
+}
+
+function autoGenerateVarFromArray(srcArray, varNamePrefix)
+{
+  var i = 0
+  while(i < srcArray.length)
+  {
+    this[varNamePrefix +'_' + i] = srcArray[i]; 
+    i++;
+  } 
+}
+</script>
+
+</head>
+
+<body>
+
+<div id="mapid"></div>
+<div id="lat_kapal"></div>
+<div id="lng_kapal"></div>
+<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+<script>
+
+
+var mymap = L.map('mapid').setView([-7.278899   , 112.793550], 18);
+
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(mymap);
+
+var polygon = L.polygon([
+    [  -7.278899   , 112.793570],
+	[  -7.278982   , 112.793590],
+	[  -7.279010   , 112.793750],
+	[  -7.278818   , 112.793790],
+	[  -7.278737   , 112.793550]
+]).addTo(mymap);
+
+<!-- var marker1 = L.marker([-7.278899   , 112.793570]).addTo(mymap); -->
+<!-- var marker2 = L.marker([-7.278982   , 112.793590]).addTo(mymap); -->
+<!-- var marker3 = L.marker([-7.279010   , 112.793750]).addTo(mymap); -->
+<!-- var marker4 = L.marker([-7.278818   , 112.793790]).addTo(mymap); -->
+<!-- var marker5 = L.marker([-7.278737   , 112.793550]).addTo(mymap); -->
+
+lat = docWrite(lat1)
+lng = docWrite(lng1)
+var marker1 = L.marker([lat,lng]).addTo(mymap);
+
+</script>
+
+</body>
+
+</html>
